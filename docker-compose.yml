@@ -1,0 +1,16 @@
+version: '3'
+services:
+  cloud-service:
+    environment:
+      - PORT=3001
+      - DATABASE_URL=localhost
+      - CLASSIFICATION_OUTPUT_DIR=/Users/joshuaeverett/desktop/classification-service/results/
+      - LOGS_DIR=/Users/joshuaeverett/desktop/classification-service/logs/
+      - LOG_LEVEL=INFO
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3001:3001
+    volumes:
+      - /usr/files:/usr/files
