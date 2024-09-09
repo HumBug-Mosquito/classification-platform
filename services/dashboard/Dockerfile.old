@@ -33,9 +33,5 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 # Copy application code
 COPY . .
 
-# Create a non-root user
-# RUN useradd -m appuser
-# USER appuser
-
 # Run the application
-CMD ["python", "src/main.py"]
+CMD ["python", "services/dashboard/dashboard-service.py"]
