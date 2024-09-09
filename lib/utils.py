@@ -4,7 +4,7 @@ import logging
 import numpy as np
 import pandas as pd
 
-from src.config import Config
+from lib.config import Config
 
 
 def pad_mean(x_temp: np.ndarray, sample_length: int) -> np.ndarray:
