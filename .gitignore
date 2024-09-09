@@ -3,3 +3,5 @@ logs/
 src/legacy
 
 *.pth
+.DS_Store
+__pycache__/
