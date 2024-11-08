@@ -6,6 +6,14 @@ class DescriptiveError(Exception):
         self.description = description
         self.status_code = status_code
         super().__init__(description)
+        
+    def __dict__(self):
+        return {
+            "id": self.id,
+            "error": self.error,
+            "message": self.description,
+            "status_code": self.status_code
+        }
 class RecordingNotFoundInDatabaseError(DescriptiveError):
     def __init__(self, recording_id: str):
         super( ).__init__(

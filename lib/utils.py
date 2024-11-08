@@ -1,11 +1,43 @@
 # This function pads a short-audio tensor with its mean to ensure that it becomes a 1.92 sec long audio equivalent
 import logging
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import soundfile as sf
 
 from lib.config import Config
 
+
+def ensure_minimum_length(signal: np.ndarray, config: Config) -> np.ndarray:
+    desired_length = 8000 * config.min_length
+    x_mean = np.mean(signal)
+
+    left_pad_amt = int((desired_length - len(signal)) // 2)
+    right_pad_amt = int(desired_length - len(signal) - left_pad_amt)
+    
+    left_pad_mean_add = np.full(left_pad_amt, x_mean, dtype=np.float32)
+    right_pad_mean_add = np.full(right_pad_amt, x_mean, dtype=np.float32)
+    
+    return np.concatenate([left_pad_mean_add, signal, right_pad_mean_add])
+
+def pad_and_step_signal(signal: np.ndarray, config: Config) -> np.ndarray:
+    batch_size =  int(8000 * config.min_length)
+    batches = []
+    for i in range(0, len(signal), batch_size):
+        batch = signal[i:i + batch_size]
+        if len(batch) < batch_size:
+            batch = ensure_minimum_length(batch, config)
+        batches.append(batch)
+    return batches
+
+def prepare(signal: np.ndarray, config: Config) -> np.ndarray:
+    batch_size =  8000 * config.min_length
+    if len(signal) < batch_size:
+        signal = ensure_minimum_length(signal, config)
+    return pad_and_step_signal(signal, config)
+
+    
 
 def pad_mean(x_temp: np.ndarray, sample_length: int) -> np.ndarray:
     logging.debug("inside padding mean...")
@@ -82,3 +114,14 @@ def get_offsets_df(df: pd.DataFrame, short_audio=False, config: Config=Config.de
             end = row['length'] * rate
             audio_offsets.append({'id':row['id'], 'offset':0,'length': row['length'],'specie_ind': label_ind,'start':0 , 'end':int(end)})
     return pd.DataFrame(audio_offsets)
+
+
+def get_audio_with_events(recording_bytes, events, config: Config) -> np.ndarray:
+    df = events.get_data_frame(config=config)
+    print("Data frame: \n", df)
+
+    signal = recording_bytes
+    return prepare(np.hstack([signal[
+            int(float(row["med_start_time"]) * config.sample_rate):
+            int(float(row["med_stop_time"]) * config.sample_rate)
+    ] for _, row in df.iterrows()]), config)

@@ -5,3 +5,6 @@ src/legacy
 *.pth
 .DS_Store
 __pycache__/
+
+Humbug/
+.idea/

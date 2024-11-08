@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WAV File Uploader</title>
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="./script.js" defer></script>
+    <script src="./chart.js" defer></script>
+    <script src="./utils.js" defer></script>
+    <style>
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
+
+      #toast {
+        visibility: hidden;
+        min-width: 250px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 5px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1;
+        left: 50%;
+        bottom: 30px;
+        font-size: 17px;
+        transform: translateX(-50%);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      #toast.show {
+        visibility: visible;
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      }
+
+      @-webkit-keyframes fadein {
+        from {
+          bottom: 0;
+          opacity: 0;
+        }
+        to {
+          bottom: 30px;
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadein {
+        from {
+          bottom: 0;
+          opacity: 0;
+        }
+        to {
+          bottom: 30px;
+          opacity: 1;
+        }
+      }
+
+      @-webkit-keyframes fadeout {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+
+      @keyframes fadeout {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body class="flex flex-col items-center justify-center min-h-svh">
+    <main class="mt-12 flex flex-col items-center w-full flex-1 text-center">
+      <div class="container mx-auto mb-12">
+        <h1 class="text-4xl">Humbug Project Mosquito Classification</h1>
+        <p class="color-grey-300 mt-2">
+          Upload a recording and predict mosquito presence and species.
+        </p>
+      </div>
+
+      <div class="container flex items-center justify-center w-full mb-4">
+        <label
+          for="dropzone-file"
+          id="dropzone-label"
+          class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+        >
+          <div class="flex flex-col items-center justify-center pt-5 pb-6">
+            <svg
+              class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 16"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+              />
+            </svg>
+            <p id="upload-text" class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+              <span class="font-semibold">Click to upload</span> or drag and drop
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">.WAV</p>
+          </div>
+          <input id="dropzone-file" type="file" class="hidden" accept=".wav" />
+        </label>
+      </div>
+
+     <div class="grid grid-cols-1 sm:grid-cols-2 sm:space-x-4 justify-center items-center sm:space-y-0 space-y-2" >
+      <button
+      id="medButton"
+      class="bg-black text-white py-2 px-4 text-md rounded-lg hover:bg-gray-700 transition hover:scale-[1.02] transform-gpu"
+    >
+      Detect Mosquito Events
+    </button>
+    <button
+      id="mscButton"
+      class="bg-black text-white py-2 px-4 text-md rounded-lg hover:bg-gray-700 transition hover:scale-[1.02] transform-gpu"
+    >
+      Detect Mosquito Species
+    </button>
+  </main>
+     </div>
+
+    <canvas id="predictionsChart" width="400" height="200" style="margin-top: 24px"></canvas>
+    <footer class="w-full text-black py-4 mt-10">
+      <div class="container mx-auto text-center">
+        <p>&copy; 2024 Humbug Project. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <div id="toast" class="toast">Toast Message</div>
+  </body>
+</html>

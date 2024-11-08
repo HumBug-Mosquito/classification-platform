@@ -1,17 +1,30 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        
-        {
-            "name": "main.py",
-            "type": "python",
-            "request": "launch",
-            "program": "src/main.py",
-            "console": "internalConsole",
-            "justMyCode": true
-        }
-    ]
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python Debugger: FastAPI",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "uvicorn",
+      "env": {
+        "PORT": "8002",
+        "DATABASE_URL": "localhost",
+        "LOGS_DIR": "/Users/joshuaeverett/Documents/Humbug/CloudAudioProcessingService/logs/",
+        "CLASSIFICATION_OUTPUT_DIR": "/Users/joshuaeverett/Documents/Humbug/CloudAudioProcessingService/results/",
+        "SPECIES_CLASSIFIER_MODEL_PATH": "/Users/joshuaeverett/Documents/Humbug/CloudAudioProcessingService/lib/msc/model_e186_2022_10_11_11_18_50.pth",
+        "EVENT_DETECTOR_MODEL_PATH": "/Users/joshuaeverett/Documents/Humbug/CloudAudioProcessingService/lib/med/model_presentation_draft_2022_04_07_11_52_08.pth"
+      },
+      "args": ["services.live.live-service:app", "--reload", "--port", "8002", "--host", "0.0.0.0"],
+      "jinja": true
+    },
+    {
+      "name": "Launch index.html",
+      "type": "chrome",
+      "request": "launch",
+      "file": "${workspaceFolder}/services/web/html/index.html"
+    }
+  ]
 }

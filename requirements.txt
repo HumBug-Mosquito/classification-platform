@@ -13,3 +13,4 @@ torchaudio==2.1.2
 torchvision
 websockets==11.0.3
 fastapi==0.108.0
+uvicorn

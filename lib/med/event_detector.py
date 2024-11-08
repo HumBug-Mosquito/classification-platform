@@ -5,14 +5,14 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
+from lib.custom_types import DetectedEvents
 from lib.exceptions import UserCancelledError
 from lib.med.mids_med import MidsMEDModel
-from lib.types import DetectedEvents
 
 
 class EventDetector:
-    model: MidsMEDModel    
-    
+    model: MidsMEDModel
+
     def __init__(self, model_path: str):
         self.logger = logging.getLogger('EventDetector')
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -22,22 +22,22 @@ class EventDetector:
         model.load_state_dict(torch.load(model_path, map_location=self.device))
         model.eval()
         self.model = model
-        
-        self.model_checkpoint = model_path.split("/")[-1] 
+
+        self.model_checkpoint = model_path.split("/")[-1]
         self.logger.info("MED model loaded successfully. Used checkpoint: {0}".format(model_path))
 
     """
     Detects events in the given audio bytes.
        - bytes: the audio bytes to detect events in
        - send_update_to_client: a function to send updates to the client. (float progress, string message)
-       - abort_signal: a signal to abort the detection. 
+       - abort_signal: a signal to abort the detection.
     Returns a list of detected events.
     """
     def detect(self, signal: torch.FloatTensor, send_update_to_client, abort_signal=threading.Event()) -> DetectedEvents:
         # Dict maps batch index to prediction
         predictions : dict= {}
         for batch_index, signal_window in enumerate(signal):
-            if abort_signal.is_set():
+            if abort_signal and abort_signal.is_set():
                 self.logger.info("Classification cancelled.")
                 raise UserCancelledError()
             predictions[batch_index] = self.classify_batch(signal_window)
@@ -48,9 +48,9 @@ class EventDetector:
         predictions_array = np.array([[pred["0"], pred["1"]] for _, pred in predictions.items()])
         send_update_to_client(100, "Classification finished.")
         return DetectedEvents(predictions_array, self.model_checkpoint)
-    
 
-    def classify_batch(self, batch_bytes: torch.FloatTensor) :
+
+    def classify_batch(self, batch_bytes: torch.FloatTensor):
         with torch.no_grad():
             results = self.model(batch_bytes)['prediction']
             softmax = F.softmax(results, dim=1)
@@ -67,6 +67,3 @@ class EventDetector:
         ]
 
         return results[0]
-
-    
-    
