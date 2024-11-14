@@ -65,6 +65,8 @@ class Classifier:
 
         print("Detecting events first")
         events = self.med(bytes, send_update_to_client, abort_signal)        
+        if not events.has_events(detect_threshold=config.det_threshold):
+            return SpeciesClassificationResponse.no_events_detected(events, self.species_classifier.model_checkpoint)
 
         print("detected events! ")
         events_audio = get_audio_with_events(bytes, events, config)

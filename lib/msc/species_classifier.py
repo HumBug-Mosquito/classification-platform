@@ -29,6 +29,7 @@ To use the Species Classifier, you need to do the following steps:
 """
 class SpeciesClassifier: 
     model: MidsMSCModel
+    model_checkpoint: str
 
     def __init__(self, model_path: str):
         self.logger = logging.getLogger('SpeciesClassifier')

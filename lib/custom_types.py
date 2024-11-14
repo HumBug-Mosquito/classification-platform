@@ -33,6 +33,9 @@ class DetectedEvents:
             "model": self.model
         }
         
+    def has_events(self, detect_threshold: float):
+        return True in self.predictions_array[:, 1] > detect_threshold
+        
     @staticmethod
     def from_dict(data: dict):
         return DetectedEvents(np.array(data["predictions"]), data["model"])
@@ -170,6 +173,10 @@ class SpeciesClassificationResponse:
             },
             "events": self.events.__dict__()
         }
+        
+    @staticmethod
+    def no_events_detected(events: DetectedEvents, model: str):
+        return SpeciesClassificationResponse([], model=model, events=events)
         
     @staticmethod
     def from_dict(data: dict):
