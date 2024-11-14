@@ -5,22 +5,9 @@ networks:
     driver: bridge
 
 services:
-  nginx:
-    image: nginx:latest
-    container_name: nginx
-    ports:
-      - '80:80' # Expose port 80 to the host
-      - '8002:8002'
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/conf.d/:/etc/nginx/conf.d/:ro
-    depends_on:
-      - web
-      - live
-    networks:
-      - webnet
-
   web:
+    ports:
+      - '8004:80'
     build:
       context: ./services/web/
       dockerfile: Dockerfile
@@ -33,6 +20,8 @@ services:
       context: ./
       dockerfile: ./services/live/Dockerfile
     container_name: live
+    ports:
+      - '8002:8002'
     environment:
       - PORT=8002
       - DATABASE_URL=localhost
