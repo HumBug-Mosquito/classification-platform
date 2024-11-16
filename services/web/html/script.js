@@ -1,3 +1,5 @@
+const classificationDomain = 'classification.humbug.ac.uk';
+
 function showToast(message) {
   const toast = document.getElementById('toast');
   toast.innerText = message;
@@ -80,7 +82,7 @@ document.getElementById('medButton').addEventListener('click', async () => {
  */
 async function performMed(input) {
   // Establish a WebSocket connection
-  const socket = new WebSocket('ws://live.localhost/med');
+  const socket = new WebSocket(`wss://${classificationDomain}/med`);
   // On connection open, send the file bytes
   socket.addEventListener('open', async () => {
     showToast('WebSocket connection established. Sending file...');
@@ -117,7 +119,7 @@ async function performMed(input) {
 
 async function performMsc(input) {
   // Establish a WebSocket connection
-  const socket = new WebSocket('ws://live.localhost/msc');
+  const socket = new WebSocket(`wss://${classificationDomain}/msc`);
   // On connection open, send the file bytes
   socket.addEventListener('open', () => {
     showToast('WebSocket connection established. Sending file...');

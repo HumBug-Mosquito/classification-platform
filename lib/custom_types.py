@@ -186,63 +186,6 @@ class SpeciesClassificationResponse:
             events=DetectedEvents.from_dict(data["events"])
         )
     
-    
-    # @staticmethod
-    # def from_events_and_species_classification(events: DetectedEvents, species_predictions: dict[int, dict[str, float]], model: str, config: Config):
-    #     df = events.get_data_frame(config=config)
-    #     rows = [
-    #         [float(row["med_start_time"]), float(row["med_stop_time"])]
-    #         for _, row in df.iterrows()
-    #     ]
-
-    #     counter = 0
-    #     detected_species = []
-    #     current_species = None
-    #     start_time = None
-    #     end_time = None
-    #     current_predictions = {}
-
-    #     for row in rows:
-    #         start, end = row
-    #         increment = config.min_length  # increment as a float
-
-    #         current = start
-    #         while current < end:
-    #             species_prediction = species_predictions[counter]
-    #             species = max(species_prediction, key=species_prediction.get)
-
-    #             # If species matches the current one, extend the end time
-    #             if current_species == species and end_time == current:
-    #                 end_time += config.min_length
-    #                 for k, v in species_prediction.items():
-    #                     current_predictions[k] = max(current_predictions.get(k, 0), v)
-    #             else:
-    #                 # Append the previous contiguous species entry, if any
-    #                 if current_species:
-    #                     detected_species.append(DetectedSpecies(
-    #                         start=start_time,
-    #                         end=end_time,
-    #                         predictions=current_predictions
-    #                     ))
-
-    #                 # Reset for the new species
-    #                 current_species = species
-    #                 start_time = current
-    #                 end_time = current + config.min_length
-    #                 current_predictions = species_prediction.copy()
-
-    #             counter += 1
-    #             current += increment
-
-    #     # Append the final contiguous segment
-    #     if current_species:
-    #         detected_species.append(DetectedSpecies(
-    #             start=start_time,
-    #             end=end_time,
-    #             predictions=current_predictions
-    #         ))
-
-    #     return SpeciesClassificationResponse(detected_species, model=model, events=events)
     @staticmethod
     def from_events_and_species_classification(events: DetectedEvents, species_predictions: dict[int, dict[str, float]], model: str, config: Config):
         df = events.get_data_frame(config=config)
