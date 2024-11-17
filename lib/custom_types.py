@@ -34,7 +34,7 @@ class DetectedEvents:
         }
         
     def has_events(self, detect_threshold: float):
-        return True in self.predictions_array[:, 1] > detect_threshold
+        return True in (self.predictions_array[:, 1] > detect_threshold)
         
     @staticmethod
     def from_dict(data: dict):
