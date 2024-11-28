@@ -15,13 +15,14 @@ class EventDetector:
 
     def __init__(self, model_path: str):
         self.logger = logging.getLogger('EventDetector')
-        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu')
 
         model = MidsMEDModel()
         print("Loading MED model from {0}".format(model_path))
         model.load_state_dict(torch.load(model_path, map_location=self.device))
         model.eval()
         self.model = model
+        self.model = torch.nn.DataParallel(model).to(self.device)
 
         self.model_checkpoint = model_path.split("/")[-1]
         self.logger.info("MED model loaded successfully. Used checkpoint: {0}".format(model_path))
@@ -35,6 +36,7 @@ class EventDetector:
     """
     def detect(self, signal: torch.FloatTensor, send_update_to_client, abort_signal=threading.Event()) -> DetectedEvents:
         # Dict maps batch index to prediction
+        signal = signal.to(self.device) 
         predictions : dict= {}
         for batch_index, signal_window in enumerate(signal):
             if abort_signal and abort_signal.is_set():

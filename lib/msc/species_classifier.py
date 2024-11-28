@@ -33,23 +33,25 @@ class SpeciesClassifier:
 
     def __init__(self, model_path: str):
         self.logger = logging.getLogger('SpeciesClassifier')
-        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu')
+
 
         model = MidsMSCModel()
         print("Loading MSC model from {0}".format(model_path))
         model.load_state_dict(torch.load(model_path, map_location=self.device))
         model.eval()
         self.model = model
+        self.model = torch.nn.DataParallel(model).to(self.device)
 
         self.model_checkpoint = model_path.split("/")[-1]
         self.logger.info("MSC model loaded successfully. Used checkpoint: {0}".format(model_path))
 
     
     def classify(self, events_audio: torch.FloatTensor,send_update_to_client,detected_events: DetectedEvents, abort_signal=threading.Event(), config=Config.default()) -> SpeciesClassificationResponse:
+        events_audio = events_audio.to(self.device)
         # Batch index to species predictions which is dict of species to probabilities
         predictions : dict[int,dict[str,float]] = {}
         for batch_index, signal_window in enumerate(events_audio):
-            print("Processing batch {0} of {1}".format(batch_index + 1, events_audio.shape[0]))
             if abort_signal and abort_signal.is_set():
                 self.logger.info("Classification cancelled.")
                 raise UserCancelledError()

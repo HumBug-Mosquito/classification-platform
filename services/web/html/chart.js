@@ -126,16 +126,20 @@ function renderSpecies(species) {
 
   const detectedSpecies = getSpeciesPredictions();
 
+  const colors = detectedSpecies.map(
+    (_) =>
+      `#${Math.floor(Math.random() * 16777215)
+        .toString(16)
+        .padStart(6, '0')}`
+  );
+
   window.eventsChart = new Chart(ctx2, {
     type: 'line',
     data: {
-      datasets: detectedSpecies.map((detectedSpecie, _) => ({
+      datasets: detectedSpecies.map((detectedSpecie, index) => ({
         label: `Probability for ${detectedSpecie.specie}`,
         data: detectedSpecie.predictions,
-        borderColor: `#${Math.floor(Math.random() * 16777215)
-          .toString(16)
-          .padStart(6, '0')}`,
-        tension: 0.5,
+        borderColor: colors[index],
         fill: false,
       })),
     },
@@ -166,6 +170,57 @@ function renderSpecies(species) {
       },
     },
   });
+
+  renderSpeciesTable(species);
+}
+/**
+ *
+ * @param {{start: number, end: number, species: string, predictions: Record<string, number>}[]} species
+ */
+function renderSpeciesTable(species) {
+  // Aggregate all of the species predictions for the recording.
+
+  const predictions = species.map((e) => e['predictions']);
+
+  const result = predictions.reduce((acc, obj) => {
+    for (const key in obj) {
+      acc[key] += obj[key]; // Accumulate the values for each key
+    }
+    return acc;
+  }, Object.fromEntries(Object.keys(predictions[0]).map((key) => [key, 0])));
+
+  // Calculate the mean of the predictions
+  for (const key in result) {
+    result[key] /= predictions.length;
+  }
+
+  const table = document.getElementById('speciesTable');
+
+  const tbody = document.createElement('tbody');
+
+  // Transform the result object into a vertical structure
+  Object.entries(result).forEach(([species, probability]) => {
+    const row = document.createElement('tr');
+
+    // Create the species cell
+    const speciesCell = document.createElement('td');
+    speciesCell.setAttribute('style', 'font-weight: bold;');
+    speciesCell.textContent = species;
+
+    // Create the probability cell
+    const probabilityCell = document.createElement('td');
+    probabilityCell.textContent = (probability * 100).toFixed(2).toString() + '%'; // Format to 2 decimal places
+
+    // Append cells to the row
+    row.appendChild(speciesCell);
+    row.appendChild(probabilityCell);
+
+    // Append the row to the table body
+    tbody.appendChild(row);
+  });
+
+  // Append the body to the table
+  table.appendChild(tbody);
 }
 
 function combineContiguousSpecies(detectedSpecies) {
