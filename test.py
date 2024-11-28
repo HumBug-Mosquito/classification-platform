@@ -13,6 +13,8 @@ logging.basicConfig(level=logging.INFO)
 
 import matplotlib.pyplot as plt
 
+RECORDING_PRESENCE = "lib/storage/test_audio_on_off.wav"
+RECORDING_NO_PRESENCE = "lib/storage/test_no_presence.wav"
 
 def plot_predictions(predictions, species_annotations):
     # Extract the positive event probability and labels based on the predictions
@@ -46,9 +48,7 @@ def detect_species():
         "CLASSIFICATION_OUTPUT_DIR": "./output" ,
     }))
 
-    file = 'lib/storage/test_audio_on_off.wav'
-
-    signal, _ = librosa.load(file, sr=8000)
+    signal, _ = librosa.load(RECORDING_NO_PRESENCE, sr=8000)
 
     def output_progress(progress , message):
         print(f"{progress}%: {message}")

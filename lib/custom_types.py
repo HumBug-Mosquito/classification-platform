@@ -55,11 +55,11 @@ class DetectedEvents:
     def _build_timestamp_df(self,predictions, time_to_sample, det_threshold, recording: AudioRecording | None = None) -> pd.DataFrame:
         """Use the predictions to build an array of contiguous timestamps where the
         probability of detection is above threshold"""
-        
-        print(time_to_sample)
-
         # find where the average 2nd element (positive score) is > threshold
         condition = predictions[:, 1] > det_threshold
+        if (condition.size == 0):
+            return pd.DataFrame([])
+
         preds_list = []
         current_offset = 0
         for start, stop in self._contiguous_regions(condition):
@@ -86,7 +86,7 @@ class DetectedEvents:
         a 2D array where the first column is the start index of the region and the
         second column is the end index."""
 
-        # Find the indicies of changes in "condition"
+        # Find the indices of changes in "condition"
         d = np.diff(condition)
         idx, = d.nonzero()
 
