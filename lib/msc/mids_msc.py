@@ -75,12 +75,13 @@ class MidsMSCModel(nn.Module):
                            sr=8000, output_format="Magnitude", trainable=True,)
         self.out = nn.Linear(self.backbone.num_features, 1)
         self.sizer = VT.Resize((image_size,image_size))
-        self.timeMasking = AT.TimeMasking(time_mask_param=int(30*0.4), iid_masks=True)
-        self.freqMasking = AT.FrequencyMasking(freq_mask_param=int((2048//4)*0.15), iid_masks=True)
+        
+        # These have been commented as they are introducing randomness and causing non-deterministic behavior
+        # self.timeMasking = AT.TimeMasking(time_mask_param=int(30*0.4), iid_masks=True)
+        # self.freqMasking = AT.FrequencyMasking(freq_mask_param=int((2048//4)*0.15), iid_masks=True)
         self.pcen_layer = self.PCENTransform(eps=1e-6, s=0.025, alpha=0.6, delta=0.1, r=0.2, trainable=True)
         
     def normalize(self, x):
-        size = x.shape
         x_max = x.max(1, keepdim=True)[0] # Finding max values for each frame
         x_min = x.min(1, keepdim=True)[0]  
         output = (x-x_min)/(x_max-x_min) # If there is a column with all zero, nan will occur
@@ -100,10 +101,10 @@ class MidsMSCModel(nn.Module):
         logging.debug("Out put of PCEN and input shape that goes for NORM = " + str(spec.shape))
         spec = self.normalize(spec)
         
-        logging.debug("Out put of NORM and input shape that goes for time mask = " + str(spec.shape))
-        spec = self.timeMasking(spec)
-        logging.debug("Out put of timemask and input shape that goes for freq mask = " + str(spec.shape))
-        spec = self.freqMasking(spec)
+        # logging.debug("Out put of NORM and input shape that goes for time mask = " + str(spec.shape))
+        # spec = self.timeMasking(spec)
+        # logging.debug("Out put of timemask and input shape that goes for freq mask = " + str(spec.shape))
+        # spec = self.freqMasking(spec)
 
         # then size for CNN model
         # and create a channel
@@ -117,7 +118,6 @@ class MidsMSCModel(nn.Module):
             
             
         x = self.backbone(x)
-        pred = x
-        output = {"prediction": pred,
+        output = {"prediction": x,
                   "spectrogram": spec}
         return output

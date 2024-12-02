@@ -1,0 +1,364 @@
+{
+    "species": {
+        "model": "model_e186_2022_10_11_11_18_50.pth",
+        "detected_species": [
+            {
+                "start": 0.0,
+                "end": 1.92,
+                "species": "ma uniformis",
+                "predictions": {
+                    "ma uniformis": 0.9999997615814209,
+                    "an arabiensis": 8.451335276049576e-08,
+                    "culex pipiens complex": 5.7300432843021554e-08,
+                    "ae aegypti": 1.8369735954593125e-08,
+                    "an coustani": 8.801698925253731e-09,
+                    "an funestus ss": 3.75195829960262e-09,
+                    "an squamosus": 3.5647302887298338e-09,
+                    "ma africanus": 1.958634809895443e-09
+                }
+            },
+            {
+                "start": 1.92,
+                "end": 3.84,
+                "species": "ma uniformis",
+                "predictions": {
+                    "ma uniformis": 0.9999909400939941,
+                    "an arabiensis": 8.451592293567955e-06,
+                    "culex pipiens complex": 2.3728993880922644e-07,
+                    "an coustani": 2.3052309927606984e-07,
+                    "an funestus ss": 1.1188672033313196e-07,
+                    "ma africanus": 6.774995853220389e-08,
+                    "an squamosus": 4.204828840670416e-08,
+                    "ae aegypti": 3.743113907717088e-08
+                }
+            },
+            {
+                "start": 3.84,
+                "end": 5.76,
+                "species": "ma uniformis",
+                "predictions": {
+                    "ma uniformis": 0.9999926090240479,
+                    "an arabiensis": 6.489267434517387e-06,
+                    "culex pipiens complex": 4.913699171993358e-07,
+                    "an coustani": 1.9027794451176305e-07,
+                    "ae aegypti": 6.836692989509174e-08,
+                    "an squamosus": 2.154163603051984e-08,
+                    "an funestus ss": 1.4543059201344022e-08,
+                    "ma africanus": 4.120816132768823e-09
+                }
+            },
+            {
+                "start": 5.76,
+                "end": 7.68,
+                "species": "ma uniformis",
+                "predictions": {
+                    "ma uniformis": 0.9993448853492737,
+                    "an arabiensis": 0.0006487810169346631,
+                    "culex pipiens complex": 4.38980532635469e-06,
+                    "an coustani": 1.7661287756709498e-06,
+                    "ae aegypti": 1.4928275504644262e-07,
+                    "an squamosus": 6.32439380865435e-08,
+                    "an funestus ss": 3.029070683169266e-08,
+                    "ma africanus": 1.6004271685687854e-08
+                }
+            },
+            {
+                "start": 7.68,
+                "end": 9.6,
+                "species": "ma uniformis",
+                "predictions": {
+                    "ma uniformis": 0.9999479055404663,
+                    "culex pipiens complex": 3.6380031815497205e-05,
+                    "an arabiensis": 1.4614185602113139e-05,
+                    "an coustani": 4.6470628944916825e-07,
+                    "ae aegypti": 2.3183707753560157e-07,
+                    "an squamosus": 2.1810568284763576e-07,
+                    "an funestus ss": 1.6507327416093176e-07,
+                    "ma africanus": 2.7760140852706172e-08
+                }
+            },
+            {
+                "start": 9.6,
+                "end": 11.52,
+                "species": "ma uniformis",
+                "predictions": {
+                    "ma uniformis": 0.9794484972953796,
+                    "an arabiensis": 0.019853245466947556,
+                    "culex pipiens complex": 0.0006302819238044322,
+                    "an coustani": 5.123879964230582e-05,
+                    "ma africanus": 7.629831088706851e-06,
+                    "ae aegypti": 4.0172080844058655e-06,
+                    "an funestus ss": 3.0306305234262254e-06,
+                    "an squamosus": 2.1493381154868985e-06
+                }
+            },
+            {
+                "start": 11.52,
+                "end": 13.44,
+                "species": "ma uniformis",
+                "predictions": {
+                    "ma uniformis": 0.9990390539169312,
+                    "an arabiensis": 0.0007998239016160369,
+                    "culex pipiens complex": 0.00011873194307554513,
+                    "an coustani": 4.141720273764804e-05,
+                    "ae aegypti": 3.5762946026807185e-07,
+                    "an squamosus": 2.5229201128240675e-07,
+                    "an funestus ss": 2.1135929273441434e-07,
+                    "ma africanus": 1.900209269933839e-07
+                }
+            },
+            {
+                "start": 13.44,
+                "end": 15.36,
+                "species": "ma uniformis",
+                "predictions": {
+                    "ma uniformis": 0.9999901056289673,
+                    "an arabiensis": 7.254168394865701e-06,
+                    "culex pipiens complex": 2.208128080383176e-06,
+                    "an coustani": 2.5976146389439236e-07,
+                    "ae aegypti": 1.0008145778783728e-07,
+                    "an funestus ss": 6.477836222984479e-08,
+                    "an squamosus": 5.163792948792434e-08,
+                    "ma africanus": 1.3838169721225313e-08
+                }
+            },
+            {
+                "start": 15.36,
+                "end": 17.28,
+                "species": "ma uniformis",
+                "predictions": {
+                    "ma uniformis": 0.9999349117279053,
+                    "an arabiensis": 6.361647683661431e-05,
+                    "culex pipiens complex": 1.2548558743219473e-06,
+                    "an coustani": 7.689174452707448e-08,
+                    "an funestus ss": 3.640792556325323e-08,
+                    "ae aegypti": 3.333118314685635e-08,
+                    "an squamosus": 3.187425079431705e-08,
+                    "ma africanus": 1.7610862101946623e-08
+                }
+            },
+            {
+                "start": 32.64,
+                "end": 34.56,
+                "species": "ma uniformis",
+                "predictions": {
+                    "ma uniformis": 0.9999780654907227,
+                    "culex pipiens complex": 1.1674841516651213e-05,
+                    "an arabiensis": 3.6661797366832616e-06,
+                    "an coustani": 3.017083827216993e-06,
+                    "an squamosus": 2.726357934079715e-06,
+                    "ae aegypti": 4.925267944599909e-07,
+                    "ma africanus": 1.6803244307084242e-07,
+                    "an funestus ss": 1.53542828229547e-07
+                }
+            },
+            {
+                "start": 34.56,
+                "end": 36.480000000000004,
+                "species": "ma uniformis",
+                "predictions": {
+                    "ma uniformis": 0.9999034404754639,
+                    "an arabiensis": 8.499245450366288e-05,
+                    "culex pipiens complex": 6.8658505369967315e-06,
+                    "an coustani": 4.2537180888757575e-06,
+                    "an funestus ss": 1.6415746983966528e-07,
+                    "ae aegypti": 1.266977420755211e-07,
+                    "an squamosus": 5.586316476069442e-08,
+                    "ma africanus": 1.9007064366860504e-08
+                }
+            },
+            {
+                "start": 36.480000000000004,
+                "end": 38.400000000000006,
+                "species": "ma uniformis",
+                "predictions": {
+                    "ma uniformis": 0.9979748129844666,
+                    "an arabiensis": 0.0011668190127238631,
+                    "culex pipiens complex": 0.0008487777085974813,
+                    "an coustani": 5.420502020569984e-06,
+                    "an funestus ss": 1.9106869331153575e-06,
+                    "ae aegypti": 1.371668190586206e-06,
+                    "an squamosus": 5.415373038886173e-07,
+                    "ma africanus": 3.723617965079029e-07
+                }
+            },
+            {
+                "start": 38.400000000000006,
+                "end": 40.32000000000001,
+                "species": "ma uniformis",
+                "predictions": {
+                    "ma uniformis": 0.9969088435173035,
+                    "an arabiensis": 0.002910932060331106,
+                    "culex pipiens complex": 0.0001379807072225958,
+                    "an coustani": 3.984412978752516e-05,
+                    "ae aegypti": 1.1595417390708462e-06,
+                    "an funestus ss": 5.334266006684629e-07,
+                    "an squamosus": 3.9432313769793836e-07,
+                    "ma africanus": 2.9432638370963105e-07
+                }
+            },
+            {
+                "start": 40.32000000000001,
+                "end": 42.24000000000001,
+                "species": "ma uniformis",
+                "predictions": {
+                    "ma uniformis": 0.999993085861206,
+                    "culex pipiens complex": 5.968272034806432e-06,
+                    "an arabiensis": 7.749063684059365e-07,
+                    "an coustani": 1.0511408987667892e-07,
+                    "ae aegypti": 5.365303934468102e-08,
+                    "an funestus ss": 3.6915480450261384e-08,
+                    "an squamosus": 2.225344708506327e-08,
+                    "ma africanus": 1.1872535843338028e-08
+                }
+            },
+            {
+                "start": 42.24000000000001,
+                "end": 44.16000000000001,
+                "species": "ma uniformis",
+                "predictions": {
+                    "ma uniformis": 0.9998866319656372,
+                    "an arabiensis": 0.0001065433825715445,
+                    "culex pipiens complex": 6.1784339777659625e-06,
+                    "an coustani": 3.3925303455362155e-07,
+                    "ae aegypti": 9.098361886117345e-08,
+                    "an funestus ss": 8.91318165940902e-08,
+                    "an squamosus": 4.168593648046226e-08,
+                    "ma africanus": 2.3471049104273334e-08
+                }
+            },
+            {
+                "start": 44.16000000000001,
+                "end": 46.08000000000001,
+                "species": "ma uniformis",
+                "predictions": {
+                    "ma uniformis": 0.9999898672103882,
+                    "culex pipiens complex": 5.638102265947964e-06,
+                    "an arabiensis": 4.092436938663013e-06,
+                    "an coustani": 3.809279291999701e-07,
+                    "ae aegypti": 5.860378848865366e-08,
+                    "an funestus ss": 2.1737006861144437e-08,
+                    "ma africanus": 1.5318242674311477e-08,
+                    "an squamosus": 1.2489967282647285e-08
+                }
+            }
+        ]
+    },
+    "events": {
+        "predictions": [
+            [
+                0.33132514357566833,
+                0.6686748266220093
+            ],
+            [
+                0.14103862643241882,
+                0.8589613437652588
+            ],
+            [
+                0.1900956779718399,
+                0.8099042773246765
+            ],
+            [
+                0.09774138033390045,
+                0.9022586345672607
+            ],
+            [
+                0.10854095965623856,
+                0.891459047794342
+            ],
+            [
+                0.4332159459590912,
+                0.5667840242385864
+            ],
+            [
+                0.22272630035877228,
+                0.7772736549377441
+            ],
+            [
+                0.6377744674682617,
+                0.3622255325317383
+            ],
+            [
+                0.13615447282791138,
+                0.8638455271720886
+            ],
+            [
+                0.10508871078491211,
+                0.8949112296104431
+            ],
+            [
+                0.9258219599723816,
+                0.07417799532413483
+            ],
+            [
+                0.9289637804031372,
+                0.07103625684976578
+            ],
+            [
+                0.9289637804031372,
+                0.07103625684976578
+            ],
+            [
+                0.9400989413261414,
+                0.05990106612443924
+            ],
+            [
+                0.936379075050354,
+                0.063620924949646
+            ],
+            [
+                0.9289637804031372,
+                0.07103625684976578
+            ],
+            [
+                0.9289637804031372,
+                0.07103625684976578
+            ],
+            [
+                0.9150857925415039,
+                0.08491414785385132
+            ],
+            [
+                0.13477599620819092,
+                0.8652240037918091
+            ],
+            [
+                0.20887809991836548,
+                0.7911219000816345
+            ],
+            [
+                0.09147704392671585,
+                0.9085229635238647
+            ],
+            [
+                0.22361330687999725,
+                0.7763866782188416
+            ],
+            [
+                0.10068967193365097,
+                0.899310290813446
+            ],
+            [
+                0.2019180953502655,
+                0.7980818748474121
+            ],
+            [
+                0.2746690511703491,
+                0.7253310084342957
+            ],
+            [
+                0.08685840666294098,
+                0.9131416082382202
+            ],
+            [
+                0.08116106688976288,
+                0.9188389182090759
+            ],
+            [
+                0.10424099117517471,
+                0.8957590460777283
+            ]
+        ],
+        "model": "model_presentation_draft_2022_04_07_11_52_08.pth"
+    }
+}

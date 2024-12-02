@@ -21,6 +21,13 @@
       "jinja": true
     },
     {
+      "name": "Test",
+      "type": "debugpy",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "program": "${workspaceFolder}/msc_test.py"
+    },
+    {
       "name": "Launch index.html",
       "type": "chrome",
       "request": "launch",

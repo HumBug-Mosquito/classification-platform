@@ -21,7 +21,7 @@ def ensure_minimum_length(signal: np.ndarray, config: Config) -> np.ndarray:
     
     return np.concatenate([left_pad_mean_add, signal, right_pad_mean_add])
 
-def pad_and_step_signal(signal: np.ndarray, config: Config) -> np.ndarray:
+def pad_and_step_signal(signal: np.ndarray, config: Config) -> np.array:
     batch_size =  int(8000 * config.min_length)
     batches = []
     for i in range(0, len(signal), batch_size):
@@ -31,7 +31,7 @@ def pad_and_step_signal(signal: np.ndarray, config: Config) -> np.ndarray:
         batches.append(batch)
     return batches
 
-def prepare(signal: np.ndarray, config: Config) -> np.ndarray:
+def prepare(signal: np.ndarray, config: Config) -> np.array:
     batch_size =  8000 * config.min_length
     if len(signal) < batch_size:
         signal = ensure_minimum_length(signal, config)
@@ -116,7 +116,7 @@ def get_offsets_df(df: pd.DataFrame, short_audio=False, config: Config=Config.de
     return pd.DataFrame(audio_offsets)
 
 
-def get_audio_with_events(recording_bytes, events, config: Config) -> np.ndarray:
+def get_audio_with_events(recording_bytes, events, config: Config) -> np.array:
     df = events.get_data_frame(config=config)
     print("Data frame: \n", df)
 

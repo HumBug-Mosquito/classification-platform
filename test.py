@@ -5,41 +5,15 @@ import librosa
 
 from lib.classifier import Classifier
 from lib.config import Config
-from lib.custom_types import (DetectedEvents, Environment,
-                              SpeciesClassificationResponse)
+from lib.custom_types import Environment, SpeciesClassificationResponse
+from testing.graphs import plot_predictions, plot_species_predictions
 
 logging.basicConfig(level=logging.INFO)
-
-
-import matplotlib.pyplot as plt
 
 RECORDING_PRESENCE = "lib/storage/test_audio_on_off.wav"
 RECORDING_NO_PRESENCE = "lib/storage/test_no_presence.wav"
 
-def plot_predictions(predictions, species_annotations):
-    # Extract the positive event probability and labels based on the predictions
-    positive_event_probability = [prediction[1] for prediction in predictions]
-    labels = [(index + 1) * 1.92 for index in range(len(predictions))]  # time labels based on 1.92s batch duration
     
-    # Plotting the data
-    plt.figure(figsize=(10, 6))
-    plt.plot(labels, positive_event_probability, label='Probability of Presence', marker='o', linestyle='-', color='salmon')
-    
-    # Adding annotations for species events
-    for annotation in species_annotations:
-        plt.axvline(x=annotation, color='gray', linestyle='--', linewidth=0.5, label='Species Event' if annotation == species_annotations[0] else "")
-    
-    # Labels and title
-    plt.xlabel('Time (seconds)')
-    plt.ylabel('Probability')
-    plt.title('Predicted Probability of Presence Over Time')
-    plt.ylim(0, 1)
-    plt.legend()
-    plt.grid(True, linestyle='--', alpha=0.7)
-
-    # Show plot
-    plt.show()
-
 def detect_species():
     classifier = Classifier(Environment({
         "DATABASE_URL": "localhost",
@@ -48,7 +22,7 @@ def detect_species():
         "CLASSIFICATION_OUTPUT_DIR": "./output" ,
     }))
 
-    signal, _ = librosa.load(RECORDING_NO_PRESENCE, sr=8000)
+    signal, _ = librosa.load(RECORDING_PRESENCE, sr=8000)
 
     def output_progress(progress , message):
         print(f"{progress}%: {message}")
@@ -72,6 +46,6 @@ FULL_RUN = True
 
 species = detect_species() if FULL_RUN else load_stored_events()
 
-print(species.events.get_data_frame(Config.default()))
+plot_predictions(species.events.predictions_array)
 
-plot_predictions(species.events.predictions_array, [])
+plot_species_predictions( species.detected_species)
