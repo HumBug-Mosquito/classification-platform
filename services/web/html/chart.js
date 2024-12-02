@@ -18,20 +18,21 @@ function renderChart(events, species) {
  * @param {number[]} events
  */
 function renderEvents(events) {
-  const ctx = document.getElementById('eventsChart');
-
-  // Destroy previous chart instance if it exists
-  if (window.eventsChart instanceof Chart) {
-    window.eventsChart.destroy();
-  }
+  // // Destroy previous chart instance if it exists
 
   const data = events.map((event, index) => ({
     x: (index + 1) * 1.92,
     y: event,
   }));
-
   data.unshift({ x: 0, y: 0 });
+
+  const ctx = document.getElementById('eventsChart');
+
   // Create the chart with annotations
+  if (window.eventsChart instanceof Chart) {
+    window.eventsChart.destroy();
+  }
+
   window.eventsChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -54,7 +55,6 @@ function renderEvents(events) {
             display: true,
             text: 'Time (seconds)', // Updated label to reflect time
           },
-          min: 0,
         },
         y: {
           title: {
@@ -89,6 +89,8 @@ function renderSpecies(species) {
         })),
       }));
 
+    predictions.unshift({ x: 0, y: 0 });
+
     return predictions;
   }
 
@@ -99,7 +101,7 @@ function renderSpecies(species) {
     return combinedSpecies.map((entry) => {
       return {
         type: 'box',
-        xMin: entry.start, // / 1.92,
+        xMin: entry.start, // 1.92,
         xMax: entry.end, /// 1.92,
         yMin: 0,
         yMax: 1,
@@ -117,13 +119,6 @@ function renderSpecies(species) {
     });
   }
 
-  const ctx2 = document.getElementById('speciesChart');
-
-  // Destroy previous chart instance if it exists
-  if (window.speciesChart instanceof Chart) {
-    window.speciesChart.destroy();
-  }
-
   const detectedSpecies = getSpeciesPredictions();
 
   const colors = detectedSpecies.map(
@@ -133,7 +128,13 @@ function renderSpecies(species) {
         .padStart(6, '0')}`
   );
 
-  window.eventsChart = new Chart(ctx2, {
+  const ctx2 = document.getElementById('speciesChart');
+
+  if (window.speciesChart instanceof Chart) {
+    window.speciesChart.destroy();
+  }
+
+  window.speciesChart = new Chart(ctx2, {
     type: 'line',
     data: {
       datasets: detectedSpecies.map((detectedSpecie, index) => ({

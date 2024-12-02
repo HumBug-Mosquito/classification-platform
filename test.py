@@ -11,6 +11,7 @@ from testing.graphs import plot_predictions, plot_species_predictions
 logging.basicConfig(level=logging.INFO)
 
 RECORDING_PRESENCE = "lib/storage/test_audio_on_off.wav"
+ANOPH_ARABIEN = "lib/storage/anoph_arabien.wav"
 RECORDING_NO_PRESENCE = "lib/storage/test_no_presence.wav"
 
     
@@ -22,7 +23,7 @@ def detect_species():
         "CLASSIFICATION_OUTPUT_DIR": "./output" ,
     }))
 
-    signal, _ = librosa.load(RECORDING_PRESENCE, sr=8000)
+    signal, _ = librosa.load(ANOPH_ARABIEN, sr=8000)
 
     def output_progress(progress , message):
         print(f"{progress}%: {message}")
