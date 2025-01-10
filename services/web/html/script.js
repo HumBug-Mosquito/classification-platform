@@ -1,12 +1,7 @@
-const classificationDomain = 'classification.humbug.ac.uk';
+const classificationDomain = 'wss://classification.humbug.ac.uk';
 
 function showToast(message) {
-  const toast = document.getElementById('toast');
-  toast.innerText = message;
-  toast.classList.remove('hidden');
-  setTimeout(() => {
-    toast.classList.add('hidden');
-  }, 3000);
+  window.showBanner(message, 'info', false);
 
   return;
 }
@@ -15,7 +10,7 @@ function showToast(message) {
 document.getElementById('dropzone-file').addEventListener('change', (event) => {
   const file = event.target.files[0];
   if (file) {
-    showToast(`File selected: ${file.name}`);
+    window.showBanner(`File selected: ${file.name}`);
     document.getElementById('upload-text').innerText = file.name;
   }
 });
@@ -39,7 +34,7 @@ dropzoneLabel.addEventListener('drop', (event) => {
     const fileInput = document.getElementById('dropzone-file');
     fileInput.files = files;
     const file = files[0];
-    showToast(`File selected: ${file.name}`);
+    window.showBanner(`File selected: ${file.name}`);
     document.getElementById('upload-text').innerText = file.name;
   }
 });
@@ -49,28 +44,31 @@ document.getElementById('mscButton').addEventListener('click', async () => {
 
   const fileInput = document.getElementById('dropzone-file');
   if (fileInput.files.length === 0) {
-    showToast('Please select a WAV file first.');
+    window.showBanner('Please select a WAV file first.', 'error');
     return;
   }
 
   const file = fileInput.files[0];
-  showToast('Reading file...');
+  window.showBanner('Reading file...');
+
+  setIsLoading(true, 'mscButton');
   const data = await getProcessedDataFromFile(file);
 
   await performMsc(data);
 });
 
 document.getElementById('medButton').addEventListener('click', async () => {
-  showToast('Processing file...');
+  window.showBanner('Processing file...');
 
   const fileInput = document.getElementById('dropzone-file');
   if (fileInput.files.length === 0) {
-    showToast('Please select a WAV file first.');
+    window.showBanner('Please select a WAV file first.', 'error');
     return;
   }
 
   const file = fileInput.files[0];
-  showToast('Reading file...');
+  window.showBanner('Ensuring correct sampling...');
+  setIsLoading(true, 'medButton');
   const data = await getProcessedDataFromFile(file);
 
   await performMed(data);
@@ -82,12 +80,13 @@ document.getElementById('medButton').addEventListener('click', async () => {
  */
 async function performMed(input) {
   // Establish a WebSocket connection
-  const socket = new WebSocket(`wss://${classificationDomain}/med`);
+  const socket = new WebSocket(`${classificationDomain}/med`);
   // On connection open, send the file bytes
   socket.addEventListener('open', async () => {
-    showToast('WebSocket connection established. Sending file...');
+    window.showBanner('Connection established. Sending file...');
     setIsLoading(true, 'medButton');
     socket.send(JSON.stringify(Array.from(input)));
+    showToast('File sent. Waiting for response...');
   });
 
   // Handle messages received from the server
@@ -104,22 +103,20 @@ async function performMed(input) {
 
   // Handle errors
   socket.addEventListener('error', (error) => {
-    setIsLoading(false, undefined);
-    showToast('WebSocket error occurred.');
+    showToast('WebSocket error occurred.', 'error', true);
     console.dir(error);
     console.error('WebSocket error:', error);
   });
 
   // Handle connection close
   socket.addEventListener('close', () => {
-    setIsLoading(false, undefined);
-    showToast('WebSocket connection closed.');
+    window.showBanner('WebSocket connection closed.', 'error', true);
   });
 }
 
 async function performMsc(input) {
   // Establish a WebSocket connection
-  const socket = new WebSocket(`wss://${classificationDomain}/msc`);
+  const socket = new WebSocket(`${classificationDomain}/msc`);
   // On connection open, send the file bytes
   socket.addEventListener('open', () => {
     showToast('WebSocket connection established. Sending file...');
@@ -134,8 +131,13 @@ async function performMsc(input) {
     if (message['type'] === 'complete') {
       const predictions = message['data']['events']['predictions'];
       const speciesAnnotations = message['data']['species']['detected_species'];
-      setIsLoading(false, undefined);
+      window.showBanner('Processing complete.', 'info', true);
+      setTimeout(() => {
+        window.clearBanner();
+      }, 3000);
       plotPredictions(predictions, speciesAnnotations);
+    } else if (message['type'] === 'progress') {
+      showToast('Progress: ' + message['data']['message']);
     } else {
       showToast('Message from server: ' + event.data);
     }
@@ -143,8 +145,7 @@ async function performMsc(input) {
 
   // Handle errors
   socket.addEventListener('error', (error) => {
-    setIsLoading(false, undefined);
-    showToast('WebSocket error occurred.');
+    window.showBanner('WebSocket error occurred.', 'error', true);
     console.dir(error);
     console.error('WebSocket error:', error);
   });
@@ -152,6 +153,7 @@ async function performMsc(input) {
   // Handle connection close
   socket.addEventListener('close', () => {
     setIsLoading(false, undefined);
+    window.clearBanner();
     showToast('WebSocket connection closed.');
   });
 }

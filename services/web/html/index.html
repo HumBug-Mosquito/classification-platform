@@ -32,6 +32,24 @@
         transform: translateX(-50%);
       }
 
+      .banner {
+        display: none;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+      }
+
+      .banner.error {
+        background-color: #f44336;
+        color: white;
+      }
+
+      .banner.info {
+        background-color: blue;
+        opacity: 0.4;
+        color: white;
+      }
+
       .container {
         max-width: 1200px;
         margin: 0 auto;
@@ -94,6 +112,7 @@
         </p>
       </div>
 
+      <div id='banner' class="banner"></div>
       <div class="container flex items-center justify-center w-full mb-4">
         <label
           for="dropzone-file"

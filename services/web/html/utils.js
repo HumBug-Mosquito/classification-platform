@@ -113,8 +113,9 @@ const mscButtonId = 'mscButton';
  *
  * @param {boolean} shouldBeLoading - Whether or not the loading state should be active.
  * @param {string} buttonId - The id of the button that triggered the loading state
+ * @param {boolean} clearBanner - Whether setting the loading state should clear the banner.
  */
-function setLoading(shouldBeLoading, buttonId) {
+function setLoading(shouldBeLoading, buttonId, clearBanner = false) {
   //  If the loading state is already active, do nothing.
   if (shouldBeLoading === getIsLoading()) return;
 
@@ -139,6 +140,31 @@ function setLoading(shouldBeLoading, buttonId) {
 }
 
 /**
+ * This function shows a banner on the screen containing a message for the user.
+ * @param {string} message - The message to display to the user.
+ * @param {'info' | 'error'} type - The type of message to display to the user.
+ * @param {boolean} clearLoading - Whether or not to clear the loading state.
+ */
+function showBanner(message, type = 'info', clearLoading = false) {
+  const banner = document.getElementById('banner');
+  banner.style.display = 'block';
+
+  banner.innerText = message;
+  banner.className = `banner ${type}`;
+
+  if (clearLoading) setLoading(false);
+}
+
+/**
+ * This function clears the banner on the screen.
+ */
+function clearBanner() {
+  const banner = document.getElementById('banner');
+  banner.style.display = 'none';
+  banner.innerText = '';
+}
+
+/**
  * This function gets an element that is mutated when we enter a loading state and check
  * if the properties set during a loading state are present.
  */
@@ -152,3 +178,5 @@ function getIsLoading() {
 
 window.setIsLoading = setLoading;
 window.getIsLoading = getIsLoading;
+window.showBanner = showBanner;
+window.clearBanner = clearBanner;

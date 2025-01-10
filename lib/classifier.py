@@ -60,7 +60,6 @@ class Classifier:
     def med(self, bytes: np.ndarray, send_update_to_client: Callable[[float, str], None] | None = None, abort_signal: threading.Event | None = None, config: Config = Config.default() ) -> DetectedEvents:
         return self.event_detector.detect(torch.FloatTensor(prepare(bytes, config)), send_update_to_client, abort_signal)
 
-
     def msc(self, bytes: np.ndarray, send_update_to_client: Callable[[float, str], None] | None = None, abort_signal: threading.Event | None = None, config: Config = Config.default()) -> SpeciesClassificationResponse:
 
         print("Detecting events first")
@@ -71,4 +70,4 @@ class Classifier:
         print("detected events! ")
         events_audio = get_audio_with_events(bytes, events, config)
         return self.species_classifier.classify(torch.FloatTensor(events_audio), send_update_to_client=send_update_to_client,detected_events=events, abort_signal=abort_signal, config=config)    
-        
+

@@ -33,8 +33,10 @@ class DetectedEvents:
             "model": self.model
         }
         
-    def has_events(self, detect_threshold: float):
-        return True in (self.predictions_array[:, 1] > detect_threshold)
+    # Whether there are at least 2 detected events (to make a segment).
+    def has_events(self, detect_threshold: float) -> bool:
+        condition = self.predictions_array[:, 1] > detect_threshold
+        return condition.sum() >= 2
         
     @staticmethod
     def from_dict(data: dict):
@@ -57,7 +59,7 @@ class DetectedEvents:
         probability of detection is above threshold"""
         # find where the average 2nd element (positive score) is > threshold
         condition = predictions[:, 1] > det_threshold
-        if (condition.size == 0):
+        if (not True in condition) :
             return pd.DataFrame([])
 
         preds_list = []
