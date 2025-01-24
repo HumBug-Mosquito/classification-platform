@@ -77,6 +77,16 @@ async def event_detection(websocket: WebSocket):
         await websocket.send_text(json.dumps({"type": "error", "data":e.__dict__()}))
     except WebSocketDisconnect:
         print("Client disconnected")
+    except Exception as e:
+        print("Error raised: ", e)
+        if websocket.client_state == WebSocketState.CONNECTED:
+            await websocket.send_text(json.dumps({"type": "error", "data": {
+                "id": "server_error",
+                "error": "Internal server error",
+                "message": str(e),
+                "status_code": 500
+            }}))
+                
     finally:
         if not abort_signal.is_set():
             abort_signal.set()
@@ -93,7 +103,6 @@ async def species_classification(websocket: WebSocket):
         if (websocket.client_state == WebSocketState.CONNECTED):
             submit_async(websocket.send_text(json.dumps({"type": "progress", "data": {"progress": progress, "message": status}})))
             
-    abort_signal= threading.Event()
     try:
         while websocket.client_state == WebSocketState.CONNECTED:
             message = await websocket.receive_text()
@@ -110,9 +119,10 @@ async def species_classification(websocket: WebSocket):
         await websocket.send_text(json.dumps({"type": "error", "data": e.__dict__()  }))
 
     except WebSocketDisconnect as e:
-        print("Client disconnected")
+        print(f"Client disconnected. Reason: {e}")
 
-    except any as e:
+    except Exception as e:
+        print("Error raised: ", e)
         if websocket.client_state == WebSocketState.CONNECTED:
             await websocket.send_text(json.dumps({"type": "error", "data": {
                 "id": "server_error",

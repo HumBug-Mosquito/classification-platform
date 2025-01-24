@@ -29,7 +29,7 @@ def pad_and_step_signal(signal: np.ndarray, config: Config) -> np.array:
         if len(batch) < batch_size:
             batch = ensure_minimum_length(batch, config)
         batches.append(batch)
-    return batches
+    return np.array(batches)
 
 def prepare(signal: np.ndarray, config: Config) -> np.array:
     batch_size =  8000 * config.min_length
