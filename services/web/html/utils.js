@@ -43,9 +43,7 @@ async function getProcessedDataFromFile(file) {
   }
 
   // Logging for inspection
-  // console.log('Resampled Audio Samples (8000 Hz):', resampledData);
   console.log('Re-sampled audio to:', targetSampleRate);
-  // console.log('Length:', newLength);
 
   return resampledData;
 }
@@ -53,55 +51,6 @@ async function getProcessedDataFromFile(file) {
 window.getProcessedDataFromFile = getProcessedDataFromFile;
 
 const batchSize = 15360;
-/**
- *
- * @param {Float32Array} signal
- * @returns
- */
-function prepare(signal) {
-  if (signal.length < batchSize) signal = ensureMinimumLength(signal);
-
-  return padAndStepSignal(signal);
-}
-
-window.prepare = prepare;
-
-/**
- *
- * @param {Float32Array} signal
- * @returns {Float32Array}
- */
-function ensureMinimumLength(signal) {
-  const desiredLength = Math.floor(batchSize);
-
-  const xMean = signal.reduce((a, b) => a + b) / signal.length;
-
-  const leftPadAmt = Math.floor((desiredLength - signal.length) / 2);
-  const leftPadMeanAdd = Array(leftPadAmt).fill(xMean);
-
-  const rightPadAmt = desiredLength - signal.length - leftPadAmt;
-  const rightPadMeanAdd = Array(rightPadAmt).fill(xMean);
-
-  return Array.from(new Float32Array([...leftPadMeanAdd, ...signal, ...rightPadMeanAdd]));
-}
-
-/**
- *
- * @param {Float32Array} paddedAudioBytes
- * @returns {Float32Array[]}
- */
-function padAndStepSignal(signal) {
-  const batches = [];
-  for (let i = 0; i < signal.length; i += batchSize) {
-    let batch = signal.slice(i, i + batchSize); // Slice signal into chunks of batchSize
-    if (batch.length < batchSize) {
-      batch = ensureMinimumLength(batch);
-    }
-
-    batches.push(batch);
-  }
-  return batches;
-}
 
 const medButtonId = 'medButton';
 const mscButtonId = 'mscButton';

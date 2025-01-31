@@ -1,8 +1,9 @@
 import asyncio
 import json
+import logging
 import os
+import sys
 import threading
-from queue import Queue
 
 import numpy as np
 import pandas as pd
@@ -15,6 +16,7 @@ from lib.custom_types import Environment
 from lib.exceptions import DescriptiveError
 
 app = FastAPI()
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 # CORS middleware
 app.add_middleware(
@@ -31,7 +33,6 @@ pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
 pd.set_option('display.max_colwidth', None)
-
 
 def _start_async():
     loop = asyncio.new_event_loop()
@@ -107,16 +108,16 @@ async def species_classification(websocket: WebSocket):
         while websocket.client_state == WebSocketState.CONNECTED:
             message = await websocket.receive_text()
             if (message is None): break
-            bytes = json.loads(message)
             np_bytes = np.array(bytes, dtype=np.float32)
 
-            events = classifier.msc(np_bytes, send_update_to_client=on_progress, abort_signal=abort_signal)
-            completed_message = {"type": "complete", "data": events.__dict__()}
+            results = await asyncio.get_running_loop().run_in_executor(None, classifier.msc, np_bytes, on_progress, abort_signal)
+            completed_message = {"type": "complete", "data": results.__dict__()}
             await websocket.send_json(completed_message)
 
     except DescriptiveError as e:
         print(f"Descriptive error: {e.description}")
-        await websocket.send_text(json.dumps({"type": "error", "data": e.__dict__()  }))
+        if websocket.client_state == WebSocketState.CONNECTED:
+            await websocket.send_text(json.dumps({"type": "error", "data": e.__dict__()  }))
 
     except WebSocketDisconnect as e:
         print(f"Client disconnected. Reason: {e}")

@@ -7,6 +7,8 @@ from pathlib import Path
 import librosa
 import websockets
 
+from testing.graphs import plot_predictions, plot_species_predictions
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -38,7 +40,9 @@ async def connect_and_test():
             await websocket.send(json.dumps(signal.tolist()))
             
             # Listen for responses until the connection is closed
-            while True:
+            has_closed = False
+            result = None
+            while not has_closed:
                 try:
                     response = await websocket.recv()
                     try:
@@ -46,13 +50,25 @@ async def connect_and_test():
                         parsed_response = json.loads(response)
                         print(parsed_response)
                         logger.info(f"Received JSON: {json.dumps(parsed_response, indent=2)}")
+                        
+                        if parsed_response["type"] == "complete": 
+                            has_closed = True
+                            result = parsed_response
+                        elif parsed_response["type"] == "error":
+                            has_closed = True
+                        
                     except json.JSONDecodeError:
                         # If not JSON, log as raw message
                         logger.info(f"Received raw message: {response}")
                         
                 except :
                     logger.info("WebSocket connection closed")
+                    has_closed = True
                     break
+                
+            if not result: return
+         
+            plot_predictions(result["data"]["events"]["predictions"])
                 
     except Exception as e:
         logger.error(f"An error occurred: {e}")
